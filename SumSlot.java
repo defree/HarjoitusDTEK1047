@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sumservice;
+package sumservice.HarjoitusDTEK1047;
 
 /**
  *
@@ -32,37 +32,18 @@ public class SumSlot {
                 e.printStackTrace();
             }
         }
-            ++n;
+            //lock.lock();
+            n++;
             sum+=number;
-            notifyAll();
+            //notifyAll();
     }
     
-    public int GetSum() {
+    public  synchronized int GetSum() {
         return sum;
     }
     
-    public int GetN(){
+    public synchronized int GetN(){
         return n;
     }
-    
-    public synchronized void empty()
-    {
-        while (lock.lock)
-        {
-            try
-            {
-                wait();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        this.sum = 0;
-        this.n = 0;
-        //notifyAll();
-    }
             
-    
-    
 }

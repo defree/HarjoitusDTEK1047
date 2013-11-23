@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sumservice;
+package sumservice.HarjoitusDTEK1047;
 
 import java.net.*;
 import java.io.*;
@@ -13,9 +13,10 @@ import java.io.*;
  */
 public class SumThread extends Thread{
     
-    private int port;
+    public  int port;
     private SumSlot slot;
-    ServerSocket server;
+    private ServerSocket server;
+    private InputStream iS;
     
     SumThread(int port, SumSlot slot) throws Exception{
         System.out.println("Ctor SumThread in port: "+port);
@@ -30,28 +31,55 @@ public class SumThread extends Thread{
         {
             Socket client = server.accept();
 
-            InputStream iS = client.getInputStream();
-            OutputStream oS = client.getOutputStream();
-
-            ObjectOutputStream oOut = new ObjectOutputStream(oS);
+            iS = client.getInputStream();
+            
             ObjectInputStream oIn = new ObjectInputStream(iS);
             int input = 1;
+
             while ((input = oIn.readInt()) != 0)
             {
-                System.out.println("port: "+port+" saving: "+input);
+                
                 slot.Save(input);
+                //System.out.println("port: "+port+" saving: "+input);
+                System.out.println("Input : "+input+" Sum: "+slot.GetSum()+ " N: "+ slot.GetN()+ " port " + (port-33335));
                 //System.out.println("port: "+port+" input: "+input);
             }
 
-           // slot.empty();
+            //slot.empty();
             System.out.println("Thread End in port: "+port);
+            
+            oIn.close();
+            iS.close();
             client.close();
+            server.close();
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("port:"+port+" error");
+            e.printStackTrace();
+            
         }
     }
+    
+    public boolean isReady()
+    {
+        try
+        {
+            
+        
+            if (iS != null && !server.isClosed()){
+                
+                return iS.available() == 0;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return true;
+    }
+    
     
     
 }

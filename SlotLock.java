@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sumservice;
+package sumservice.HarjoitusDTEK1047;
 
 /**
  *
@@ -14,12 +14,12 @@ public class SlotLock {
     public SlotLock(){
     }
     public void lock(){
-        System.out.println("locked");
-        lock = false;
+        lock = true;
+        //System.out.println("locked");
     }
     
     public void unlock(){
-        System.out.println("unlocked");
+        //System.out.println("unlocked");
         lock = false;
     }
     

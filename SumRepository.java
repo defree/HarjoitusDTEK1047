@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sumservice;
+package sumservice.HarjoitusDTEK1047;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,17 +28,20 @@ public class SumRepository {
         return slot;
     }
     
-    public int GetTotalSum(){
+    public synchronized int GetTotalSum(){
         lock.lock();
         int total_sum = 0;
         for (SumSlot slot : repository){
-            total_sum += slot.GetSum();
+            int sum = slot.GetSum();
+            //System.out.println(sum);
+            total_sum += sum;
         }
-        lock.unlock();
+        //lock.unlock();
         return total_sum;
     }
     
-    public int GetMaxSum(){
+    public synchronized int GetMaxSum(){
+
         lock.lock();
         int max_sum = 0;
         int n = 0;
@@ -51,17 +54,19 @@ public class SumRepository {
             }
             ++n;
         }
-        lock.unlock();
+        System.out.println("MaxSum:"+ max_sum);
+        //lock.unlock();
         return max+1;
     }
     
-     public int GetTotalN(){
+     public synchronized int GetTotalN(){
+
          lock.lock();
         int total_n = 0;
         for (SumSlot slot : repository){
             total_n += slot.GetN();
         }
-        lock.unlock();
+        //lock.unlock();
         return total_n;
     }
     

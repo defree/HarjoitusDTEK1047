@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sumservice;
+package sumservice.HarjoitusDTEK1047;
 
 import java.io.*;
 import java.net.*;
@@ -62,6 +62,8 @@ public class SumService {
             //repository.lock.lock = true;
             System.out.println("Kysely: "+foo);
             int output = -1;
+            while (!status(threads)) {System.out.println("wait");}
+            repository.lock.lock();
             switch (foo)
             {
                 case 1:
@@ -77,7 +79,17 @@ public class SumService {
             oOut.writeInt(output);
             oOut.flush();
             System.out.println("Vastaus: "+output);
+            repository.lock.unlock();
+            
             //repository.lock.lock = false;
+        }
+        
+        for (SumThread summer : threads)
+        {
+            if (summer.isAlive())
+            {
+                summer.stop();
+            }
         }
         
         System.out.println("Loppu");
@@ -85,4 +97,20 @@ public class SumService {
         /*
         */
      }
+    
+    public static boolean status(ArrayList<SumThread> summers)
+    {
+        for (SumThread summer : summers)
+        {
+            if (!summer.isReady())
+            {
+                System.out.println("Thread: "+summer.port);
+                return false;
+            }
+        }
+    
+        return true;
+        
+    }
+    
 }
