@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Kalle
+ * @author Kalle, Esa
  */
 public class SumService {
 
@@ -18,37 +18,42 @@ public class SumService {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        DatagramSocket clientSocket = new DatagramSocket();
-        InetAddress IPAddress = InetAddress.getByName("localhost");
-        byte[] sendData = new byte[256];
-        ArrayList<SumThread> threads = new ArrayList();
-        ArrayList<Integer> ports = new ArrayList();
+
+    	SumMessenger newConnect = new SumMessenger();
+    	
+    	String addressName = "localhost";
+    	
+    	newConnect.setTargetIP(addressName);
+    	
+        //Aloitusportti 33334 l‰het‰‰n viestin‰, 3126 on kohdeportti
         String message = "33334";
-        sendData = message.getBytes();
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length);
-        clientSocket.connect(IPAddress, 3126);
-        clientSocket.send(sendPacket);
+        int initPort = 3126;
         
-        ServerSocket server = new ServerSocket(33334);
-        server.setSoTimeout(5000);
-        Socket client = server.accept();
+        newConnect.sendData(message,initPort);
+       
         
-        InputStream iS = client.getInputStream();
-        OutputStream oS = client.getOutputStream();
+	    int socketStartPort = 33334;
+        SumSockets server = new SumSockets(socketStartPort);
         
-        ObjectOutputStream oOut = new ObjectOutputStream(oS);
-	ObjectInputStream oIn = new ObjectInputStream(iS);
+        ObjectInputStream oIn = server.getObjectInputStream();
+        ObjectOutputStream oOut = server.getObjectOutputStream();
+        
+        
+	    ArrayList<SumThread> threads = new ArrayList();
+	    ArrayList<Integer> ports = new ArrayList();
         
         int foo = oIn.readInt();
         
         SumRepository repository = new SumRepository();
         
+        //Summauspalvelinten k‰ytt‰m‰t portit 33335++
+        //V‰litet‰‰n porttien numerot palvelimelle
         for (int port = 33335;port<33335+foo;++port){
             oOut.writeInt(port);
             ports.add(port);
             oOut.flush();
         }
-        
+        //K‰yd‰‰n kaikki portit l‰pi ja lis‰t‰‰n niille oma numerovarasto
         for (int port : ports){
             System.out.println(port);
             SumSlot slot = repository.AddSlot();
@@ -93,7 +98,7 @@ public class SumService {
         }
         
         System.out.println("Loppu");
-        client.close();
+        server.closeSocket();
         /*
         */
      }

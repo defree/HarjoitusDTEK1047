@@ -9,7 +9,7 @@ import java.util.Collections;
 
 /**
  *
- * @author Kalle
+ * @author Kalle, Esa
  */
 public class SumRepository {
     

@@ -6,7 +6,7 @@ package sumservice.HarjoitusDTEK1047;
 
 /**
  *
- * @author Kalle
+ * @author Kalle, Esa
  */
 public class SumSlot {
     private int n;

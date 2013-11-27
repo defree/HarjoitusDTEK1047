@@ -9,7 +9,7 @@ import java.io.*;
 
 /**
  *
- * @author Kalle
+ * @author Kalle, Esa
  */
 public class SumThread extends Thread{
     
