@@ -22,6 +22,8 @@ public class SumThread extends Thread{
         System.out.println("Ctor SumThread in port: "+port);
         this.port = port;
         this.slot = slot;
+        
+        //T‰m‰nkin voisi siirt‰‰ Sumsocketsiin
         server = new ServerSocket(this.port);
     }
     
@@ -60,7 +62,7 @@ public class SumThread extends Thread{
             
         }
     }
-    
+    //Onko threadi valmis
     public boolean isReady()
     {
         try

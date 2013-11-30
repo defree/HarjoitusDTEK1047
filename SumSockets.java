@@ -33,6 +33,7 @@ public class SumSockets {
 	}
 	
 	public void closeSocket() throws Exception{
+		
 		client.close();
 	}
 	
